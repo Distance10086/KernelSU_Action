@@ -203,14 +203,9 @@ jobs:
       if: env.ENABLE_KERNELSU == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        # curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s ${{ env.KERNELSU_TAG }}
-        # KSU_VERSION=$(cd KernelSU && expr $(/usr/bin/git rev-list --count HEAD) + 10200)
-        # echo "UPLOADNAME=-KernelSU_$KSU_VERSION" >> $GITHUB_ENV
-        
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki
+        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s ${{ env.KERNELSU_TAG }}
         KSU_VERSION=$(cd KernelSU && expr $(/usr/bin/git rev-list --count HEAD) + 10200)
         echo "UPLOADNAME=-KernelSU_$KSU_VERSION" >> $GITHUB_ENV
-
 
     - name: Setup Configuration for Kernel
       run: |
@@ -225,15 +220,10 @@ jobs:
             fi
         fi
         if [ ${{ env.ADD_KPROBES_CONFIG }} = true -a ${{ env.APPLY_KSU_PATCH }} != true ]; then
-            # echo "CONFIG_MODULES=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            # echo "CONFIG_KPROBES=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            # echo "CONFIG_HAVE_KPROBES=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            echo "CONFIG_KPM=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            echo "CONFIG_KALLSYMS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            echo "CONFIG_KALLSYMS_ALL=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            # echo "CONFIG_KPROBE_EVENTS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            echo "CONFIG_BUILD_ARM64_DT_OVERLAY=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
-            echo "CONFIG_MODULE_FORCE_LOAD=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
+            echo "CONFIG_MODULES=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
+            echo "CONFIG_KPROBES=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
+            echo "CONFIG_HAVE_KPROBES=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
+            echo "CONFIG_KPROBE_EVENTS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
         fi
         if [ ${{ env.ADD_OVERLAYFS_CONFIG }} = true ]; then
             echo "CONFIG_OVERLAY_FS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
